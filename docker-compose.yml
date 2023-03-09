@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+  app:
+    container_name: challange
+    image: challange
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+  postgres:
+    image: postgres:14.0-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=java_challenge
+  vault:
+      image: vault:latest
+      ports:
+        - "8200:8200"
+      environment:
+        - VAULT_DEV_ROOT_TOKEN_ID=42cb7d9ae582317004e19f0b1661b923
+        - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+        - VAULT_ADDR=http://127.0.0.1:8200
